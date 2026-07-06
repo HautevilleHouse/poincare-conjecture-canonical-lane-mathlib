@@ -1,0 +1,7 @@
+-- This module is the root of the PoincareConjectureCanonicalLaneLean Lean proof package.
+import PoincareConjectureCanonicalLaneLean.Basic
+import PoincareConjectureCanonicalLaneLean.SourcePackage
+import PoincareConjectureCanonicalLaneLean.SourceDependencies
+import PoincareConjectureCanonicalLaneLean.Formalization
+import PoincareConjectureCanonicalLaneLean.ReviewerBridge
+import PoincareConjectureCanonicalLaneLean.TheoremStatement

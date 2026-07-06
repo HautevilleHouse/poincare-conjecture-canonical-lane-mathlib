@@ -1,0 +1,6 @@
+{"version": "1.2.0",
+ "packagesDir": ".lake/packages",
+ "packages": [],
+ "name": "poincare_conjecture_canonical_lane_lean",
+ "lakeDir": ".lake",
+ "fixedToolchain": false}
