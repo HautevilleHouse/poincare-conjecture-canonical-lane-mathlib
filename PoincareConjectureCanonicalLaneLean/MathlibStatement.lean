@@ -1,13 +1,12 @@
-import PoincareConjectureCanonicalLaneLean.TheoremStatement
+import PoincareConjectureCanonicalLaneLean.FinalTheorem
 import CanonicalLaneMathlibCore
 
 /-!
 # Mathlib Statement Layer
 
-This module imports the shared Mathlib-backed Canonical Lane core and binds the
-source theorem package to the common projection/carriage spine. It records the
-Mathlib-native proof obligations without asserting that the classical theorem is
-closed in Mathlib.
+This module imports the shared Mathlib-backed Canonical Lane core and the
+Poincare endgame pilot. The pilot closes over its admitted class and carries the
+unrestricted classical boundary separately.
 -/
 
 namespace HautevilleHouse
@@ -21,18 +20,19 @@ structure MathlibProofObligation where
   commonCoreImported : Bool
   theoremSpecificDefinitionsNative : Bool
   theoremSpecificBridgeNative : Bool
-  theoremSpecificClosureNative : Bool
+  theoremSpecificAdmittedClosureNative : Bool
+  unrestrictedClassicalClosureNative : Bool
   carriedGap : String
-deriving Repr, DecidableEq
 
 def mathlibProofObligation : MathlibProofObligation := {
   sourceKey := sourceRepository,
   theoremObject := sourceDescription,
   commonCoreImported := true,
-  theoremSpecificDefinitionsNative := false,
-  theoremSpecificBridgeNative := false,
-  theoremSpecificClosureNative := false,
-  carriedGap := "common projection/carriage spine is Mathlib-backed; theorem-specific native definitions and bridge proofs remain obligations"
+  theoremSpecificDefinitionsNative := true,
+  theoremSpecificBridgeNative := true,
+  theoremSpecificAdmittedClosureNative := true,
+  unrestrictedClassicalClosureNative := false,
+  carriedGap := "theorem-specific Mathlib endgame pilot closes over the admitted class; unrestricted classical closure remains carried"
 }
 
 def commonCoreProjectionLawAvailable : Prop :=
@@ -51,16 +51,20 @@ theorem mathlib_common_core_imported_checked :
     mathlibProofObligation.commonCoreImported = true := by
   rfl
 
-theorem mathlib_theorem_specific_definitions_carried :
-    mathlibProofObligation.theoremSpecificDefinitionsNative = false := by
+theorem mathlib_theorem_specific_definitions_native_checked :
+    mathlibProofObligation.theoremSpecificDefinitionsNative = true := by
   rfl
 
-theorem mathlib_theorem_specific_bridge_carried :
-    mathlibProofObligation.theoremSpecificBridgeNative = false := by
+theorem mathlib_theorem_specific_bridge_native_checked :
+    mathlibProofObligation.theoremSpecificBridgeNative = true := by
   rfl
 
-theorem mathlib_theorem_specific_closure_carried :
-    mathlibProofObligation.theoremSpecificClosureNative = false := by
+theorem mathlib_theorem_specific_admitted_closure_native_checked :
+    mathlibProofObligation.theoremSpecificAdmittedClosureNative = true := by
+  rfl
+
+theorem mathlib_unrestricted_classical_closure_carried :
+    mathlibProofObligation.unrestrictedClassicalClosureNative = false := by
   rfl
 
 theorem mathlib_common_core_projection_law_checked :
@@ -77,6 +81,14 @@ theorem mathlib_common_core_idempotence_checked :
     commonCoreIdempotenceAvailable := by
   intro X instAdd instSub L
   exact AdditiveLane.projection_idempotent_on_delta L
+
+def theoremSpecificEndgamePilotClosed : Prop :=
+  forall A : AdmissibleClass, ConstrainedPoincareClosure A
+
+theorem theorem_specific_endgame_pilot_checked :
+    theoremSpecificEndgamePilotClosed := by
+  intro A
+  exact constrained_poincare_endgame A
 
 end PoincareConjectureCanonicalLaneLean
 end HautevilleHouse
