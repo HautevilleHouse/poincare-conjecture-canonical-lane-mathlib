@@ -1,4 +1,5 @@
 import PoincareConjectureCanonicalLaneLean.FinalTheorem
+import PoincareConjectureCanonicalLaneLean.RicciFlowAnalyticFoundation
 import Mathlib.Geometry.Manifold.PoincareConjecture
 
 /-!
@@ -55,6 +56,20 @@ def PerelmanRouteClosed (R : PerelmanRouteObligations) : Prop :=
   R.finiteExtinctionOrGeometrization ∧
   R.endpointClassification
 
+/--
+Projection from the analytic foundation into the Perelman-route obligation set.
+-/
+def RicciFlowAnalyticFoundation.toPerelmanRouteObligations
+    (A : RicciFlowAnalyticFoundation) : PerelmanRouteObligations := {
+  ricciFlowWithSurgery := RicciFlowPDEClosed A.flow ∧ SurgeryClosed A.surgery
+  entropyMonotonicity := PerelmanEntropyClosed A.entropy
+  noncollapsing := NoncollapsingClosed A.noncollapsing
+  canonicalNeighborhoods := CanonicalNeighborhoodsClosed A.canonicalNeighborhoods
+  surgeryControl := SurgeryClosed A.surgery
+  finiteExtinctionOrGeometrization := GeometrizationClosed A.geometrization
+  endpointClassification := EndpointClassificationClosed A.endpoint
+}
+
 /-- The full analytic Ricci-flow proof remains the explicit formalization payload. -/
 def perelmanAnalyticFormalizationPayload : String :=
   "Ricci flow with surgery, entropy monotonicity, noncollapsing, canonical neighborhoods, surgery control, finite extinction or geometrization, and endpoint classification."
@@ -72,6 +87,34 @@ theorem perelman_route_closed_from_evidence
           (And.intro E.surgeryControlClosed
             (And.intro E.finiteExtinctionOrGeometrizationClosed
               E.endpointClassificationClosed)))))
+
+/--
+Closed Ricci-flow analytic foundation evidence produces the Perelman-route
+obligation evidence used by this module.
+-/
+def perelman_route_evidence_from_analytic_foundation
+    (A : RicciFlowAnalyticFoundation) :
+    PerelmanRouteEvidence A.toPerelmanRouteObligations := {
+  ricciFlowWithSurgeryClosed := And.intro
+    (ricci_flow_pde_closed_from_evidence A.flow A.flowEvidence)
+    (surgery_closed_from_evidence A.surgery A.surgeryEvidence)
+  entropyMonotonicityClosed := perelman_entropy_closed_from_evidence A.entropy A.entropyEvidence
+  noncollapsingClosed := noncollapsing_closed_from_evidence A.noncollapsing A.noncollapsingEvidence
+  canonicalNeighborhoodsClosed := canonical_neighborhoods_closed_from_evidence A.canonicalNeighborhoods A.canonicalNeighborhoodsEvidence
+  surgeryControlClosed := surgery_closed_from_evidence A.surgery A.surgeryEvidence
+  finiteExtinctionOrGeometrizationClosed := geometrization_closed_from_evidence A.geometrization A.geometrizationEvidence
+  endpointClassificationClosed := endpoint_classification_closed_from_evidence A.endpoint A.endpointEvidence
+}
+
+/--
+A closed Ricci-flow analytic foundation closes the Perelman-route obligation set.
+-/
+theorem perelman_route_closed_from_analytic_foundation
+    (A : RicciFlowAnalyticFoundation) :
+    PerelmanRouteClosed A.toPerelmanRouteObligations := by
+  exact perelman_route_closed_from_evidence
+    A.toPerelmanRouteObligations
+    (perelman_route_evidence_from_analytic_foundation A)
 
 /--
 A Perelman route for an admitted Poincaré object supplies the geometric route and
