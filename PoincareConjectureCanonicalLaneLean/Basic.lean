@@ -14,7 +14,7 @@ namespace PoincareConjectureCanonicalLaneLean
 
 def sourceRepository : String := "poincare-conjecture-canonical-lane"
 def sourceUrl : String := "https://github.com/HautevilleHouse/poincare-conjecture-canonical-lane"
-def sourceDescription : String := "Canonical-lane closure package for the Poincare Conjecture: admissible-class formulation, projection gates, local-to-global bridge, and carried remainder."
+def sourceDescription : String := "Canonical-lane closure package for the Poincaré Conjecture: admissible-class formulation, projection gates, local-to-global bridge, and carried remainder."
 def sourceClassification : String := "abstract_math_theorem_repo"
 def sourceTopics : List String := ["millennium-problem", "poincare-conjecture", "reproducibility", "ricci-flow", "topology", "geometrization", "mathematical-proof", "canonical-lane", "local-to-global", "manifold-constrained"]
 
